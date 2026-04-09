@@ -1,0 +1,109 @@
+// Wait for the DOM to fully load before running the script
+document.addEventListener('DOMContentLoaded', function()
+{
+ // Get a reference to the form and the section where workout data will be displayed
+    const form = document.getElementById('mainForm');
+    const displayItems = document.getElementById("localStorage");
+
+     // Add an event listener to handle form submission
+    form.addEventListener('submit', function(event)
+    { // Get input values from the form fields
+        const typeOfWorkout = document.getElementById("typeOfWorkout").value;
+        const durationOfWorkout = document.getElementById("durationOfWorkout").value;
+        const caloriesBurned = document.getElementById("caloriesBurned").value;
+        const dateOfWorkout = document.getElementById("dateOfWorkout").value;
+         // Create an object to store the workout details
+        const workoutList = {typeOfWorkout, durationOfWorkout, caloriesBurned, dateOfWorkout};
+
+
+       // Prevent the default form submission behavior (prevents page reload)
+          event.preventDefault()
+            // Save the workout to local storage
+           saveCurrentWorkout(workoutList);
+
+           // Display the workout on the page
+           displayAllWorkouts(workoutList);
+
+                // Reset the form fields after submission
+           form.reset();
+     
+    
+      
+    });
+    
+   
+    
+
+// Function to save workout data to localStorage
+    function saveCurrentWorkout(workoutList)
+{
+  // Retrieve existing workout data from localStorage, or initialize an empty array if none exist
+  let workoutLists = JSON.parse(localStorage.getItem('workoutLists')) || [];
+
+        // Add the new workout to the list
+  workoutLists.push(workoutList);
+
+
+        // Save the updated list back to localStorage
+  localStorage.setItem('workoutLists', JSON.stringify(workoutLists));
+
+}
+
+    // Function to display workout data on the page
+function displayAllWorkouts(workoutList)
+{
+      // Create a new <ul> element to display the workout details
+const itemList = document.createElement("ul");
+ // Insert workout details into the <ul> as HTML content
+itemList.innerHTML = `Workout type: ${workoutList.typeOfWorkout}  <br><br>
+Duration of the Workout: ${workoutList.durationOfWorkout}  <br><br>
+Total calories burned: ${workoutList.caloriesBurned}  <br><br>
+Date of your workout: ${workoutList.dateOfWorkout} <br> -----------------------------------------------`;
+         // Append the new workout entry to the display section
+displayItems.appendChild(itemList);
+}
+
+
+function updateStreak() {
+  let workoutLists = JSON.parse(localStorage.getItem('workoutLists')) || [];
+  let streak = 0;
+
+  if (workoutLists.length > 0) {
+      let sortedDates = workoutLists.map(workout => new Date(workout.dateOfWorkout))
+                                    .sort((a, b) => a - b); // Sort dates in ascending order
+
+      let today = new Date();
+      let lastWorkout = sortedDates[sortedDates.length - 1];
+
+      let diff = (today - lastWorkout) / (1000 * 60 * 60 * 24); // Convert ms to days
+
+      if (diff > 3) {
+          streak = 0; // Reset streak if last workout was more than 3 days ago
+      } else {
+          streak = calculateStreak(sortedDates);
+      }
+  }
+
+  document.getElementById("streakfire").innerHTML = `<i class="fa-solid fa-fire-flame-curved"></i> ${streak} days`;
+}
+
+function calculateStreak(sortedDates) {
+  let streak = 1; // Start with 1 (assuming at least one workout)
+  for (let i = sortedDates.length - 1; i > 0; i--) {
+      let prevDate = sortedDates[i - 1];
+      let currDate = sortedDates[i];
+
+      let diff = (currDate - prevDate) / (1000 * 60 * 60 * 24); // Convert ms to days
+
+      if (diff <= 3) {
+          streak++; // Continue streak
+      } else {
+          break; // Stop if gap > 3 days
+      }
+  }
+  return streak;
+}
+
+updateStreak(); // Run on page load to show current streak
+});
+

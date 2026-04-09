@@ -1,0 +1,143 @@
+function toggleMenu() {
+    document.querySelector(".nav-menu").classList.toggle("active"); // Toggles the 'active' class on the nav-menu to show or hide the menu
+    document.querySelector(".burger-menu").classList.toggle("active"); // Toggles the 'active' class on the burger menu to change the icon state (open/close)
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    const goalInput = document.getElementById("goal");
+    const targetInput = document.getElementById("target");
+    const progressInput = document.getElementById("progress");
+    const goalDisplay = document.getElementById("goal-display");
+    const progressBar = document.getElementById("progress-bar");
+    const messageDisplay = document.getElementById("message");
+    const goalRecordsTable = document.getElementById("goal-records");
+    const resetButton = document.getElementById("reset-button");
+
+    let goals = JSON.parse(localStorage.getItem("goals")) || [];
+
+    // Load saved data from localStorage
+    function loadSavedData() {
+        const savedGoal = localStorage.getItem('goal') || '';
+        const savedTarget = parseFloat(localStorage.getItem('target')) || '';
+        const savedProgress = parseFloat(localStorage.getItem('progress')) || '';
+
+        goalInput.value = savedGoal;
+        targetInput.value = savedTarget;
+        progressInput.value = savedProgress;
+
+        updateProgressBar(); // Ensure UI updates with saved values
+    }
+
+    // Save data to localStorage
+    function saveData() {
+        localStorage.setItem('goal', goalInput.value);
+        localStorage.setItem('target', targetInput.value);
+        localStorage.setItem('progress', progressInput.value);
+    }
+
+    // Function to update progress bar dynamically
+    function updateProgressBar() {
+        let target = parseFloat(targetInput.value);
+        let progress = parseFloat(progressInput.value);
+
+        if (isNaN(target) || isNaN(progress) || target <= 0 || progress < 0) {
+            goalDisplay.innerText = "Please enter valid numbers!";
+            progressBar.style.width = '0%';
+            progressBar.innerText = '0%';
+            messageDisplay.innerText = "";
+            return;
+        }
+
+        let percentage = Math.min((progress / target) * 100, 100);
+        progressBar.style.width = percentage + '%';
+        progressBar.innerText = Math.round(percentage) + '%';
+
+        let message = "";
+        if (percentage >= 100) {
+            message = "🎉 Congratulations! You've achieved your goal!";
+        } else if (percentage >= 50) {
+            message = "💪 Great job! You're halfway to your goal!";
+        } else if (percentage > 0) {
+            message = "🚀 You're making progress! Keep pushing!";
+        } else {
+            message = "Let's get started on your goal!";
+        }
+
+        messageDisplay.innerText = message;
+    }
+
+    // Function to add goal to the table
+    function addGoalToTable(goal, target, progress) {
+        let percentage = Math.min((progress / target) * 100, 100);
+        let row = `<tr>
+            <td>${goal}</td>
+            <td>${target}</td>
+            <td>${progress}</td>
+            <td>${Math.round(percentage)}%</td>
+        </tr>`;
+        goalRecordsTable.innerHTML += row;
+    }
+
+    // Function to load saved goals
+    function loadSavedGoals() {
+        goalRecordsTable.innerHTML = "";
+        goals.forEach(({ goal, target, progress }) => {
+            addGoalToTable(goal, target, progress);
+        });
+    }
+
+    // Event listener for form submission (Set Goal button)
+    document.getElementById("goal-form").addEventListener("submit", function(event) {
+        event.preventDefault();
+        let goal = goalInput.value;
+        let target = parseFloat(targetInput.value);
+        let progress = parseFloat(progressInput.value);
+
+        if (!goal || isNaN(target) || isNaN(progress) || target <= 0 || progress < 0) {
+            goalDisplay.innerText = "Please enter valid numbers!";
+            return;
+        }
+
+        // Add the new goal to the goals array
+        goals.push({ goal, target, progress });
+        localStorage.setItem("goals", JSON.stringify(goals));
+
+        // Update the progress bar and message
+        updateProgressBar();
+
+        // Add the new goal to the table
+        addGoalToTable(goal, target, progress);
+
+        // Clear the form inputs
+        goalInput.value = "";
+        targetInput.value = "";
+        progressInput.value = "";
+    });
+
+    // Event listener for reset button
+    resetButton.addEventListener("click", function() {
+        // Clear form inputs
+        goalInput.value = "";
+        targetInput.value = "";
+        progressInput.value = "";
+
+        // Reset progress bar and message
+        progressBar.style.width = '0%';
+        progressBar.innerText = '0%';
+        messageDisplay.innerText = "";
+        goalDisplay.innerText = "";
+
+        // Clear the goal records table
+        goalRecordsTable.innerHTML = "";
+
+        // Clear the goals array and localStorage
+        goals = [];
+        localStorage.removeItem('goals');
+        localStorage.removeItem('goal');
+        localStorage.removeItem('target');
+        localStorage.removeItem('progress');
+    });
+
+    // Load saved goals when the page loads
+    loadSavedGoals();
+});

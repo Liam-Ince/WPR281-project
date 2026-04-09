@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <h1>Simple Fitness Tracker</h1>
+       
+        <div class="burger-menu" onclick="toggleMenu()"> 
+            <div></div> 
+            <div></div>
+            <div></div> 
+        </div>
+
+     
+        <nav class="nav-menu"> 
+            <ul> 
+                <li><a href="../Question 5/game.html">Home</a> </li>
+                <li><a href="../Question 2/Question2.html">Stats</a></li> 
+                <li><a href="../Question 3/index.html">Goals</a></li> 
+                <li><a href="../Question 1/index.html">Log</a></li> 
+            </ul>
+        </nav>
+    </header>
+   
+    <main>
+        <div class = "grid">
+     <form id="mainForm">
+
+        <div class = "selectDropDown">
+            <label>Choose type of workout: </label>
+            <div class = "select-container">
+        <select id = "typeOfWorkout" id = "list">
+            <option value = "Strength">Strength Training</option>
+            <option value = "Cycling">Cycling</option>
+            <option value = "Swimming">Swimming</option>
+            <option value = "Running">Running</option>
+           </select>
+        </div>
+        </div> 
+      <br>
+
+      <div>
+        
+        <label for = "workoutDuration">Workout Duration(mins): </label>
+        <br>
+        <br>
+        <input type = "number" id = "durationOfWorkout" placeholder= "e.g. 58 "  min = "0" required>
+       </div>
+
+      <br>
+
+       <div>
+        <label for = "totalCaloriesBurned">Calories Burned: </label>
+        <br>
+        <br>
+        <input type = "number" id = "caloriesBurned" placeholder = "e.g. 480"  min = "0"  max = "1500" required >
+       </div>
+
+       <br>
+
+       <div>
+        <label for = "workoutDate">Date of Workout: </label>
+        <br>
+        <br>
+        <input type = "date" id = "dateOfWorkout" required >
+       </div>
+
+       <br>
+
+       <div>
+        <button type = "submit">Save</button>
+       </div>
+
+      
+     </form>
+
+
+     <div class = "scroll-bg">
+        <div class = "scroll-div">
+            <div class = "scroll-objext">          
+     <ul id = "localStorage"></ul>
+            </div>
+        </div>
+     </div>
+        </div>
+
+    </main>
+
+    <script src= "index.js"></script>
+
+    <footer>Copyright Reserved</footer>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Question2.css">
+    <title>Workout Statistics</title>
+</head>
+
+<body>
+    <header>
+        <h1>Simple Fitness Tracker</h1>
+
+        <!-- Burger Menu for mobile view -->
+        <div class="burger-menu" onclick="toggleMenu()">
+            <div class="burger-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+
+        <!-- Navigation Menu -->
+        <nav class="nav-menu">
+            <ul>
+                <li><a href="../Question 5/game.html">Home</a></li>
+                <li><a href="../Question 2/Question2.html">Stats</a></li>
+                <li><a href="../Question 3/index.html">Goals</a></li>
+                <li><a href="../Question 1/index.html">Log</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="intro">
+        <p>Track your workouts, analyze your progress, and stay fit!</p>
+    </section>
+
+    <main>
+        <div class="stats-container">
+            <div class="stat-box">
+                <h2>Total Workouts Logged</h2>
+                <p id="totalWorkouts">0</p>
+            </div>
+            <div class="stat-box">
+                <h2>Total Calories Burned</h2>
+                <p id="totalCalories">0</p>
+            </div>
+            <div class="stat-box">
+                <h2>Average Workout Duration</h2>
+                <p id="avgDuration">0 mins</p>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h3>Chart 1: Workout Duration by Type</h3>
+            <canvas id="workoutChart1"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <h3>Chart 2: Total Calories Burned</h3>
+            <canvas id="workoutChart2"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <h3>Chart 3: Average Duration of Workouts</h3>
+            <canvas id="workoutChart3"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <h3>Chart 4: Calories Burned Over Time</h3>
+            <canvas id="workoutChart4"></canvas>
+        </div>
+    </main>
+
+    <footer>
+        <p>Copyright &copy; 2025 Fitness Tracker</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="Question2.js"></script>
+
+    <script>
+        // JavaScript function to handle the burger menu toggle
+        function toggleMenu() {
+            const navMenu = document.querySelector('.nav-menu');
+            const burgerIcon = document.querySelector('.burger-icon');
+            navMenu.classList.toggle('active');
+            burgerIcon.classList.toggle('active');
+        }
+    </script>
+</body>
+
+</html>
